@@ -1,7 +1,5 @@
 # EmotionLens — RoBERTa Emotion Detection Web App
-### SemEval-2018 Task 1, Subtask E-c · Bennett University
-
-**Authors:** Krishan (E23CSEU1282) · Chirag Anand (E23CSEU1276) · Niyati Jain (E23CSEU1284)
+### SemEval-2018 Task 1, Subtask E-c 
 
 ---
 
@@ -94,17 +92,17 @@ If your model has different per-label thresholds, update `ADAPTIVE_THRESHOLDS` i
 
 ```python
 ADAPTIVE_THRESHOLDS = {
-    "anger":        0.45,   # ← replace with your values
-    "anticipation": 0.35,
-    "disgust":      0.40,
-    "fear":         0.38,
-    "joy":          0.48,
-    "love":         0.32,
-    "optimism":     0.42,
-    "pessimism":    0.36,
-    "sadness":      0.45,
-    "surprise":     0.30,
-    "trust":        0.28,
+    "anger":        0.53,   # ← replace with your values
+    "anticipation": 0.49,
+    "disgust":      0.42,
+    "fear":         0.93,
+    "joy":          0.33,
+    "love":         0.89,
+    "optimism":     0.66,
+    "pessimism":    0.73,
+    "sadness":      0.62,
+    "surprise":     0.82,
+    "trust":        0.58,
 }
 ```
 
@@ -217,10 +215,10 @@ emotion-app/
 
 | Model | Macro-F1 | Micro-F1 | Jaccard |
 |-------|----------|----------|---------|
-| SVM (TF-IDF) | 42.1% | — | 38.5% |
-| BERT-base | 53.8% | — | — |
-| RoBERTa-base (fixed τ = 0.5) | ~56% | ~67% | ~52% |
-| **RoBERTa-base + Adaptive τ (ours)** | **58.4%** | **68.9%** | **54.7%** |
+| SVM (TF-IDF) | 43.44% | 58.62% | 45.34% |
+| BERT-base | 57.72% | 65.31% | 52.18% |
+| RoBERTa-base (fixed τ = 0.5) | ~58.92% | ~67.63% | ~54.92% |
+| **RoBERTa-base + Adaptive τ (ours)** | **61.99%** | **71.25%** | **59.53%** |
 
 Model trained on SemEval-2018 Task 1, Subtask E-c (6,838 train / 3,259 test tweets).
 
