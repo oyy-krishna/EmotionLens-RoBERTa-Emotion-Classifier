@@ -6,7 +6,7 @@ Model is loaded from Hugging Face Hub at startup.
 Set environment variable HF_MODEL_REPO to your HF repo path,
 e.g.  krishanbhati/roberta-semeval2018-emotions
 """
-
+import logging
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -41,7 +41,8 @@ except Exception:
 # ─────────────────────────────────────────────────────────────────────
 # Configuration
 # ─────────────────────────────────────────────────────────────────────
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "../model/best_roberta_model.pt")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "best_roberta_model.pt")
 MAX_LEN    = 128
 
 EMOTION_LABELS = [
