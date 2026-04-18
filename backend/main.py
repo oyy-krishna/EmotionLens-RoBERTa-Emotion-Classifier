@@ -1,6 +1,10 @@
 """
 FastAPI backend — RoBERTa Multi-Label Emotion Classifier
 SemEval-2018 Task 1, Subtask E-c
+
+Model is loaded from Hugging Face Hub at startup.
+Set environment variable HF_MODEL_REPO to your HF repo path,
+e.g.  krishanbhati/roberta-semeval2018-emotions
 """
 
 from fastapi import FastAPI, HTTPException
@@ -10,11 +14,14 @@ from typing import List, Dict
 import torch
 import torch.nn as nn
 from transformers import RobertaTokenizer, RobertaModel
+from huggingface_hub import hf_hub_download
 import numpy as np
 import re
 import os
 import json
 
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)
 # ── Try to import demoji / wordninja gracefully ────────────────────
 try:
     import demoji
@@ -22,12 +29,14 @@ try:
     DEMOJI_AVAILABLE = True
 except Exception:
     DEMOJI_AVAILABLE = False
+    log.warning("demoji not available — emoji conversion disabled")
 
 try:
     import wordninja
     WORDNINJA_AVAILABLE = True
 except Exception:
     WORDNINJA_AVAILABLE = False
+    log.warning("wordninja not available — hashtag segmentation disabled")
 
 # ─────────────────────────────────────────────────────────────────────
 # Configuration
