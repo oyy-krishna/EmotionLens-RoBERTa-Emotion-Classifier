@@ -1,12 +1,12 @@
 """
 FastAPI backend — RoBERTa Multi-Label Emotion Classifier
 SemEval-2018 Task 1, Subtask E-c
-
 Model is loaded from Hugging Face Hub at startup.
 Set environment variable HF_MODEL_REPO to your HF repo path,
 e.g.  krishanbhati/roberta-semeval2018-emotions
 """
 import logging
+import requests
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -41,9 +41,10 @@ except Exception:
 # ─────────────────────────────────────────────────────────────────────
 # Configuration
 # ─────────────────────────────────────────────────────────────────────
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(BASE_DIR, "best_roberta_model.pt")
+HF_MODEL_REPO     = "oyykrishna/roberta-semeval2018-emotions"
+HF_MODEL_FILENAME = "best_roberta_model.pt"
 MAX_LEN    = 128
+
 
 EMOTION_LABELS = [
     "anger", "anticipation", "disgust", "fear",
@@ -132,18 +133,25 @@ def clean_tweet(text: str) -> str:
 # Load model at startup
 # ─────────────────────────────────────────────────────────────────────
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(f"[startup] Device: {DEVICE}")
-
-print("[startup] Loading tokenizer...")
+log.info(f"Device: {DEVICE}")
+ 
+log.info("Loading tokenizer...")
 tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
-
-print("[startup] Loading model weights...")
+ 
+log.info(f"Downloading model from HF Hub: {HF_MODEL_REPO}")
+model_path = hf_hub_download(
+    repo_id=HF_MODEL_REPO,
+    filename=HF_MODEL_FILENAME,
+    repo_type="model",
+    cache_dir="/tmp/hf_cache",
+)
+log.info(f"Model cached at: {model_path}")
+ 
 model = RoBERTaEmotionClassifier(num_labels=len(EMOTION_LABELS))
-state_dict = torch.load(MODEL_PATH, map_location=DEVICE)
-model.load_state_dict(state_dict)
+model.load_state_dict(torch.load(model_path, map_location=DEVICE))
 model.to(DEVICE)
 model.eval()
-print(f"[startup] Model ready on {DEVICE}")
+log.info("Model ready ✅")
 
 
 # ─────────────────────────────────────────────────────────────────────
