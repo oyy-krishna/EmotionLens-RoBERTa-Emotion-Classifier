@@ -1,3 +1,13 @@
+---
+title: EmotionLens
+emoji: 🔬
+colorFrom: blue
+colorTo: purple
+sdk: docker
+pinned: false
+app_port: 7860
+---
+
 # EmotionLens — RoBERTa Emotion Detection Web App
 ## SemEval-2018 Task 1, Subtask E-c · Bennett University
 
